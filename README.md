@@ -1,1 +1,1 @@
-# myalgo
+# stdalgo
