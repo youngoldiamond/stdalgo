@@ -5,6 +5,7 @@ import "fmt"
 // Хэш-таблица с открытой адресацией (только неотрицательные ключи)
 type OpenTable struct {
 	data []int // -1 - свободная ячейка, -2 - удаленый ключ
+	step int
 	h    func(int) int
 }
 
@@ -15,7 +16,11 @@ func NewOpenTable(length int, h func(int) int) *OpenTable {
 	} else if length < 1 {
 		panic("Length is less than 1 in NewOpenTable()")
 	}
-	table := &OpenTable{make([]int, length), h}
+	step := 3
+	for length%step == 0 {
+		step++
+	}
+	table := &OpenTable{make([]int, length), step, h}
 	for i := 0; i < len(table.data); i++ {
 		table.data[i] = -1
 	}
@@ -23,11 +28,11 @@ func NewOpenTable(length int, h func(int) int) *OpenTable {
 }
 
 // Находит позицию от хэш-функции и шага
-func (t *OpenTable) hashFunc(key, step int) int {
-	if (key < 0) || (step < 0) {
+func (t *OpenTable) hashFunc(key, iter int) int {
+	if (key < 0) || (iter < 0) {
 		panic("Invalid input in hashFunc()")
 	}
-	pos := (t.h(key) + step*3) % len(t.data)
+	pos := (t.h(key) + iter*t.step) % len(t.data)
 	return pos
 }
 
