@@ -2,13 +2,14 @@ package hash
 
 import "math/rand/v2"
 
+// Универсальный интерфейс хэш-таблиц
 type Table interface {
 	Insert(key int)
 	Search(key int) bool
 	Delete(key int)
 }
 
-// Создаёт простую хэш функцию с методом деления
+// Создаёт простую хэш-функцию с методом деления
 func ModFunc(len int) func(int) int {
 	if len < 1 {
 		panic("Length is less than 1 in ModFunc()")
@@ -16,7 +17,7 @@ func ModFunc(len int) func(int) int {
 	return func(key int) int { return key % len }
 }
 
-// Создаёт хэш функцию с методом умножения
+// Создаёт хэш-функцию с методом умножения
 func MultFunc(len int) func(int) int {
 	if len < 1 {
 		panic("Length is less than 1 in MultFunc()")
@@ -27,7 +28,7 @@ func MultFunc(len int) func(int) int {
 	}
 }
 
-// Создаёт функцию из универсального множества хэш функций с ключами до 1^31
+// Создаёт функцию из универсального множества хэш-функций с ключами до 1^31
 func UniFunc(len int) func(int) int {
 	if len < 1 {
 		panic("Length is less than 1 in UniFunc()")

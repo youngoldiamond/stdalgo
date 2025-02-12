@@ -21,20 +21,20 @@ func (n *Node) Key() int {
 	return n.key
 }
 
-// Хэш таблица с закрытой адресацией
+// Хэш-таблица с закрытой адресацией
 type ClosedTable struct {
 	data []*Node
 	h    func(int) int
 }
 
 // Создание новой таблицы с закрытой адресацией
-func NewTable(len int, h func(int) int) *ClosedTable {
+func NewClosedTable(length int, h func(int) int) *ClosedTable {
 	if h == nil {
-		panic("Nill hash func in NewTable()")
-	} else if len < 1 {
-		panic("Length is less than 1 in NewTable()")
+		panic("Nill hash func in NewClosedTable()")
+	} else if length < 1 {
+		panic("Length is less than 1 in NewClosedTable()")
 	}
-	return &ClosedTable{make([]*Node, len), h}
+	return &ClosedTable{make([]*Node, length), h}
 }
 
 // Вставка элемента
@@ -91,7 +91,7 @@ func (t *ClosedTable) DeleteNode(n *Node) {
 	}
 }
 
-// Удаления по ключу
+// Удаление по ключу
 func (t *ClosedTable) Delete(key int) {
 	t.DeleteNode(t.SearchNode(key))
 }
