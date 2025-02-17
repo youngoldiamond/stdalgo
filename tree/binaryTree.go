@@ -171,7 +171,7 @@ func (n *Node) Delete() {
 }
 
 // Создание дерева из массива
-func NewTree(values []int) *Node {
+func New(values []int) *Node {
 	var Tree *Node
 	for _, val := range values {
 		Tree = Tree.Insert(NewNode(val))
@@ -180,30 +180,10 @@ func NewTree(values []int) *Node {
 }
 
 // Проверка идентичности
-func IsEqualTestTree(first *Node, second *Node) bool {
+func IsEqual(first *Node, second *Node) bool {
 	if first != nil && second != nil {
-		return (first.key == second.key) && (IsEqualTestTree(first.left, second.left) && (IsEqualTestTree(first.right, second.right)))
+		return (first.key == second.key) && (IsEqual(first.left, second.left) && (IsEqual(first.right, second.right)))
 	} else {
 		return first == second
 	}
-
-}
-
-// Дерево заполненное вручную
-func MyTestTree() *Node {
-	Tree := NewNode(15)
-	Tree.left = &Node{key: 13, parent: Tree}
-	Tree.left.left = &Node{key: 9, parent: Tree.left}
-	Tree.left.left.left = &Node{key: 7, parent: Tree.left.left}
-	Tree.left.left.right = &Node{key: 10, parent: Tree.left.left}
-	Tree.left.left.right.right = &Node{key: 11, parent: Tree.left.left.right}
-	Tree.left.right = &Node{key: 14, parent: Tree.left}
-	Tree.right = &Node{key: 20, parent: Tree}
-	Tree.right.left = &Node{key: 17, parent: Tree.right}
-	Tree.right.right = &Node{key: 30, parent: Tree.right}
-	Tree.right.right.left = &Node{key: 27, parent: Tree.right.right}
-	Tree.right.right.right = &Node{key: 31, parent: Tree.right.right}
-	Tree.right.right.left.left = &Node{key: 21, parent: Tree.right.right.left}
-	Tree.right.right.left.left.right = &Node{key: 23, parent: Tree.right.right.left.left}
-	return Tree
 }
