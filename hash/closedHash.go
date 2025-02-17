@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -15,9 +16,6 @@ func NewNode(key int) *Node {
 }
 
 func (n *Node) Key() int {
-	if n == nil {
-		panic("Nill pointer in *Node.Key()")
-	}
 	return n.key
 }
 
@@ -28,13 +26,13 @@ type ClosedTable struct {
 }
 
 // Создание новой таблицы с закрытой адресацией
-func NewClosedTable(length int, h func(int) int) *ClosedTable {
+func NewClosedTable(length int, h func(int) int) (*ClosedTable, error) {
 	if h == nil {
-		panic("Nill hash func in NewClosedTable()")
+		return nil, errors.New("Nill hash func in NewClosedTable()")
 	} else if length < 1 {
-		panic("Length is less than 1 in NewClosedTable()")
+		return nil, errors.New("Length is less than 1 in NewClosedTable()")
 	}
-	return &ClosedTable{make([]*Node, length), h}
+	return &ClosedTable{make([]*Node, length), h}, nil
 }
 
 // Вставка элемента

@@ -1,6 +1,9 @@
 package hash
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // Хэш-таблица с открытой адресацией (только неотрицательные ключи)
 type OpenTable struct {
@@ -10,13 +13,16 @@ type OpenTable struct {
 }
 
 // Создание новой таблицы с открытой адресацией
-func NewOpenTable(length int, h func(int) int) *OpenTable {
+func NewOpenTable(length int, h func(int) int) (*OpenTable, error) {
 	if h == nil {
-		panic("Nill hash func in NewOpenTable()")
+		return nil, errors.New("Nill hash func in NewOpenTable()")
 	} else if length < 1 {
-		panic("Length is less than 1 in NewOpenTable()")
+		return nil, errors.New("Length is less than 1 in NewOpenTable()")
 	}
 	fstep := func(key int) int {
+		if length < 3 {
+			return 1
+		}
 		step := (ModFunc(length - 2))(key) + 1
 		for ((length*length)%step == 0) && (step != 1) {
 			step--
@@ -27,7 +33,7 @@ func NewOpenTable(length int, h func(int) int) *OpenTable {
 	for i := 0; i < len(table.data); i++ {
 		table.data[i] = -1
 	}
-	return table
+	return table, nil
 }
 
 // Находит позицию от хэш-функции и шага (двойное хэширование)
@@ -57,7 +63,7 @@ func (t *OpenTable) Insert(key int) {
 // Поиск позиции по ключу
 func (t *OpenTable) SearchPos(key int) int {
 	if key < 0 {
-		panic("Key is less than 0 in *OpenTable.SearchPos()")
+		return -1
 	}
 	for i := 0; i < len(t.data); i++ {
 		pos := t.hashFunc(key, i)
@@ -72,9 +78,6 @@ func (t *OpenTable) SearchPos(key int) int {
 
 // Содержит ли таблица ключ
 func (t *OpenTable) Search(key int) bool {
-	if key < 0 {
-		panic("Key is less than 0 in *OpenTable.Search()")
-	}
 	pos := t.SearchPos(key)
 	if pos != -1 {
 		return true

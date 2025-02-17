@@ -12,7 +12,7 @@ type Table interface {
 // Создаёт простую хэш-функцию с методом деления
 func ModFunc(len int) func(int) int {
 	if len < 1 {
-		panic("Length is less than 1 in ModFunc()")
+		return nil
 	}
 	return func(key int) int { return key % len }
 }
@@ -20,7 +20,7 @@ func ModFunc(len int) func(int) int {
 // Создаёт хэш-функцию с методом умножения
 func MultFunc(len int) func(int) int {
 	if len < 1 {
-		panic("Length is less than 1 in MultFunc()")
+		return nil
 	}
 	const gr = 0.618033989
 	return func(key int) int {
@@ -31,7 +31,7 @@ func MultFunc(len int) func(int) int {
 // Создаёт функцию из универсального множества хэш-функций с ключами до 1^31
 func UniFunc(len int) func(int) int {
 	if len < 1 {
-		panic("Length is less than 1 in UniFunc()")
+		return nil
 	}
 	const maxInt32 = (1 << 31) - 1
 	a := rand.Int64N(maxInt32-1) + 1
