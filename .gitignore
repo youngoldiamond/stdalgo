@@ -1,4 +1,7 @@
 go.mod
 main.go
 **/*_test.go
+<<<<<<< HEAD
 
+=======
+>>>>>>> binary-tree
