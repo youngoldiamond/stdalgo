@@ -32,6 +32,10 @@ func (s *Stack) Pop() int {
 	return s.data[s.top+1]
 }
 
-func (s *Stack) IsEmpty() bool {
+func (s *Stack) Size() int {
+	return s.top + 1
+}
+
+func (s *Stack) Empty() bool {
 	return s.top == -1
 }
