@@ -79,3 +79,24 @@ func MergeRec(data []int) {
 		}
 	}
 }
+
+// Быстрая сортировка с рекурсией
+func Quick(data []int) {
+	if len(data) <= 1 {
+		return
+	}
+	key := data[len(data)-1]
+	midle := -1
+	for i := range data {
+		if data[i] <= key {
+			midle++
+			if i != midle {
+				data[midle] ^= data[i]
+				data[i] ^= data[midle]
+				data[midle] ^= data[i]
+			}
+		}
+	}
+	Quick(data[:midle])
+	Quick(data[midle+1:])
+}
