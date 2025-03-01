@@ -2,33 +2,37 @@ package tree
 
 import "fmt"
 
-type Node struct {
-	key                 int
-	left, right, parent *Node
+type Numeric interface {
+	int | int8 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64
 }
 
-func NewNode(key int) *Node {
-	return &Node{key, nil, nil, nil}
+type Node[T Numeric] struct {
+	key                 T
+	left, right, parent *Node[T]
 }
 
-func (n *Node) Key() int {
+func NewNode[T Numeric](key T) *Node[T] {
+	return &Node[T]{key, nil, nil, nil}
+}
+
+func (n *Node[T]) Key() T {
 	return n.key
 }
 
-func (n *Node) Left() *Node {
+func (n *Node[T]) Left() *Node[T] {
 	return n.left
 }
 
-func (n *Node) Right() *Node {
+func (n *Node[T]) Right() *Node[T] {
 	return n.right
 }
 
-func (n *Node) Parent() *Node {
+func (n *Node[T]) Parent() *Node[T] {
 	return n.parent
 }
 
 // Центрированный обход (выводит элементы по порядку)
-func (n *Node) InorderTreeWalk() {
+func (n *Node[T]) InorderTreeWalk() {
 	if n != nil {
 		(n.left).InorderTreeWalk()
 		fmt.Println(n.key)
@@ -37,7 +41,7 @@ func (n *Node) InorderTreeWalk() {
 }
 
 // Прямой обход
-func (n *Node) StraightTreeWalk() {
+func (n *Node[T]) StraightTreeWalk() {
 	if n != nil {
 		fmt.Println(n.key)
 		(n.left).StraightTreeWalk()
@@ -46,7 +50,7 @@ func (n *Node) StraightTreeWalk() {
 }
 
 // Обратный обход
-func (n *Node) ReverseTreeWalk() {
+func (n *Node[T]) ReverseTreeWalk() {
 	if n != nil {
 		(n.left).ReverseTreeWalk()
 		(n.right).ReverseTreeWalk()
@@ -55,7 +59,7 @@ func (n *Node) ReverseTreeWalk() {
 }
 
 // Поиск элемента по ключу
-func (n *Node) IterativeTreeSearch(val int) *Node {
+func (n *Node[T]) IterativeTreeSearch(val T) *Node[T] {
 	cur := n
 	for (cur != nil) && (val != cur.key) {
 		if val < cur.key {
@@ -68,7 +72,7 @@ func (n *Node) IterativeTreeSearch(val int) *Node {
 }
 
 // Самый маленький элемент
-func (n *Node) TreeMinimum() *Node {
+func (n *Node[T]) TreeMinimum() *Node[T] {
 	cur := n
 	for cur.left != nil {
 		cur = cur.left
@@ -77,7 +81,7 @@ func (n *Node) TreeMinimum() *Node {
 }
 
 // Самый большой элемент
-func (n *Node) TreeMaximum() *Node {
+func (n *Node[T]) TreeMaximum() *Node[T] {
 	cur := n
 	for cur.right != nil {
 		cur = cur.right
@@ -86,7 +90,7 @@ func (n *Node) TreeMaximum() *Node {
 }
 
 // Следующий элемент
-func (n *Node) TreeSuccessor() *Node {
+func (n *Node[T]) TreeSuccessor() *Node[T] {
 	if n.right != nil {
 		return n.right.TreeMinimum()
 	}
@@ -97,7 +101,7 @@ func (n *Node) TreeSuccessor() *Node {
 }
 
 // Вставка элемента
-func (n *Node) Insert(x *Node) *Node {
+func (n *Node[T]) Insert(x *Node[T]) *Node[T] {
 
 	//Вариант с рекурсией
 	/*if n == nil {
@@ -140,8 +144,8 @@ func (n *Node) Insert(x *Node) *Node {
 }
 
 // Вспомогательная функция удаляет вершину с одним ребёнком или без детей
-func (n *Node) deleteIfNotTwoKid() {
-	var kid *Node
+func (n *Node[T]) deleteIfNotTwoKid() {
+	var kid *Node[T]
 	if n.left == nil {
 		kid = n.right
 	} else if n.right == nil {
@@ -160,7 +164,7 @@ func (n *Node) deleteIfNotTwoKid() {
 }
 
 // Удаление элемента
-func (n *Node) Delete() {
+func (n *Node[T]) Delete() {
 	if (n.left == nil) || (n.right == nil) {
 		n.deleteIfNotTwoKid()
 	} else {
@@ -171,8 +175,8 @@ func (n *Node) Delete() {
 }
 
 // Создание дерева из массива
-func New(values []int) *Node {
-	var Tree *Node
+func New[T Numeric](values []T) *Node[T] {
+	var Tree *Node[T]
 	for _, val := range values {
 		Tree = Tree.Insert(NewNode(val))
 	}
@@ -180,7 +184,7 @@ func New(values []int) *Node {
 }
 
 // Проверка идентичности
-func IsEqual(first *Node, second *Node) bool {
+func IsEqual[T Numeric](first *Node[T], second *Node[T]) bool {
 	if first != nil && second != nil {
 		return (first.key == second.key) && (IsEqual(first.left, second.left) && (IsEqual(first.right, second.right)))
 	} else {
