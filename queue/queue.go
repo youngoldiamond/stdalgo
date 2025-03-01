@@ -4,19 +4,19 @@ import (
 	"errors"
 )
 
-type Queue struct {
-	data       []int
+type Queue[T any] struct {
+	data       []T
 	head, tail int
 }
 
-func New(capacity int) (*Queue, error) {
+func New[T any](capacity int) (*Queue[T], error) {
 	if capacity < 1 {
 		return nil, errors.New("invalid capacity")
 	}
-	return &Queue{make([]int, capacity+1), 0, 0}, nil
+	return &Queue[T]{make([]T, capacity+1), 0, 0}, nil
 }
 
-func (q *Queue) Push(key int) {
+func (q *Queue[T]) Push(key T) {
 	if q.Size() == (len(q.data) - 1) {
 		panic("queue owerflow")
 	}
@@ -24,7 +24,7 @@ func (q *Queue) Push(key int) {
 	q.tail = (q.tail + 1) % len(q.data)
 }
 
-func (q *Queue) Pop() int {
+func (q *Queue[T]) Pop() T {
 	if q.tail == q.head {
 		panic("queue is empty")
 	}
@@ -33,7 +33,7 @@ func (q *Queue) Pop() int {
 	return ans
 }
 
-func (q *Queue) Size() int {
+func (q *Queue[T]) Size() int {
 	if q.tail >= q.head {
 		return q.tail - q.head
 	} else {
@@ -41,6 +41,6 @@ func (q *Queue) Size() int {
 	}
 }
 
-func (q *Queue) Empty() bool {
+func (q *Queue[T]) Empty() bool {
 	return q.tail == q.head
 }
