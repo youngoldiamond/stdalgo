@@ -1,29 +1,17 @@
 package graph
 
-import "github.com/youngoldiamond/stdalgo/queue"
-
-type Node struct {
-	key      int
-	adjacent []*Node
+type Graph interface {
+	Bfs(start int) ([]int, error)
+	Dfs(start int)
 }
 
-func Bfs(start *Node) map[int]int {
-	res := make(map[int]int)
-
-	q, err := queue.New[*Node](5)
-	if err != nil {
-		panic(err)
+func New(data any) *Graph {
+	var gr Graph
+	switch data := data.(type) {
+	default:
+		return nil
+	case [][]int:
+		gr = newAdjacencyList(data)
+		return &gr
 	}
-	q.Push(start)
-	for !q.Empty() {
-		cur := q.Pop()
-		for _, adj := range cur.adjacent {
-			if res[adj.key] == 0 {
-				res[adj.key] = res[cur.key] + 1
-				q.Push(adj)
-			}
-		}
-	}
-
-	return res
 }
